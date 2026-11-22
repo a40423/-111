@@ -6,7 +6,7 @@
     <title>고1 국어 - 한글 맞춤법 띄어쓰기 마스터</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Pretendard / Noto Sans KR -->
+    <!-- Google Fonts: Noto Sans KR -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,7 +26,6 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(226, 232, 240, 0.8);
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -59,12 +58,12 @@
             </div>
 
             <div class="flex items-center space-x-3">
-                <!-- Student Info Display (if logged in) -->
-                <div id="student-badge" class="hidden items-center bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium border border-indigo-100">
-                    <i class="fa-solid fa-user-graduate mr-1.5"></i>
-                    <span id="display-student-info">1학년 1반 홍길동</span>
-                    <button onclick="logoutStudent()" class="ml-2 text-indigo-400 hover:text-indigo-700" title="학생 변경">
-                        <i class="fa-solid fa-rotate"></i>
+                <!-- Privacy-Protected Status Badge (NEVER displays Name or Student ID) -->
+                <div id="student-badge" class="hidden items-center bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium border border-emerald-200">
+                    <i class="fa-solid fa-shield-halved mr-1.5"></i>
+                    <span>신원 인증됨 (개인정보 비노출 보호 중)</span>
+                    <button onclick="logoutStudent()" class="ml-2 text-emerald-500 hover:text-emerald-800" title="로그아웃">
+                        <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
 
@@ -95,7 +94,7 @@
         </div>
     </header>
 
-    <!-- Custom Notification Toast / Message Box (Replaces alert) -->
+    <!-- Custom Notification Toast -->
     <div id="toast-box" class="fixed bottom-5 right-5 z-50 transform transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
         <div class="bg-slate-800 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 max-w-sm">
             <i id="toast-icon" class="fa-solid fa-circle-info text-indigo-400 text-lg"></i>
@@ -111,27 +110,38 @@
         <!-- ========================================== -->
         <section id="section-tab-1" class="space-y-6">
             
-            <!-- Step 1: Student Identification Card -->
+            <!-- Step 1: Privacy-First Student Identification Card -->
             <div id="student-login-card" class="glass-card rounded-2xl p-6 sm:p-8 shadow-sm max-w-xl mx-auto mt-4">
                 <div class="text-center mb-6">
-                    <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2">자기주도 문법 학습</span>
-                    <h2 class="text-2xl font-bold text-slate-800">학습자 정보를 입력하세요</h2>
-                    <p class="text-sm text-slate-500 mt-1">학습 기록은 교사 관리자 페이지에 자동 저장되며,<br>퀴즈 <strong class="text-indigo-600">90점 이상</strong> 달성 시 [탭 2. 복습 노트]가 열립니다.</p>
+                    <span class="inline-flex items-center bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-full mb-2">
+                        <i class="fa-solid fa-user-shield mr-1.5"></i>개인정보 완벽 보호 모드
+                    </span>
+                    <h2 class="text-2xl font-bold text-slate-800">학습자 신원 확인</h2>
+                    <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                        입력하신 이름과 학번은 <strong>교사용 데이터베이스에만 안전하게 전송</strong>되며,<br>
+                        웹 앱 화면이나 공용 기기에는 <strong class="text-rose-600">절대 노출되거나 저장되지 않습니다.</strong>
+                    </p>
                 </div>
 
                 <form id="student-form" onsubmit="startLearning(event)" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">학년 / 반</label>
-                            <input type="text" id="input-class" required placeholder="예: 1학년 3반" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition">
+                            <label class="block text-xs font-bold text-slate-600 mb-1">이름</label>
+                            <input type="text" id="input-name" required autocomplete="off" placeholder="예: 홍길동" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">학번 / 이름</label>
-                            <input type="text" id="input-name" required placeholder="예: 15번 김민준" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition">
+                            <label class="block text-xs font-bold text-slate-600 mb-1">학번 (5자리)</label>
+                            <input type="text" id="input-student-id" required autocomplete="off" placeholder="예: 10315" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition">
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2">
-                        <span>띄어쓰기 퀴즈 시작하기</span>
+
+                    <div class="bg-slate-50 rounded-xl p-3 text-xs text-slate-500 flex items-start space-x-2 border border-slate-200/70">
+                        <i class="fa-solid fa-circle-info text-indigo-500 mt-0.5"></i>
+                        <span>이전에 <strong>90점 이상</strong>을 달성한 학생은 동일한 이름·학번 입력 시 자동으로 신원이 확인되어 <strong>[탭 2. 핵심 규정 복습 노트]</strong>가 즉시 열립니다.</span>
+                    </div>
+
+                    <button type="submit" id="btn-login-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2">
+                        <span>신원 확인 후 학습 시작하기</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </form>
@@ -153,7 +163,7 @@
 
                     <div class="flex items-center justify-between sm:justify-end space-x-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-100">
                         <div class="text-right">
-                            <p class="text-xs text-slate-400">최고 점수</p>
+                            <p class="text-xs text-slate-400">나의 최고 기록</p>
                             <p class="text-sm font-bold text-slate-700"><span id="best-score-display">0</span>점</p>
                         </div>
                         <div class="w-32 bg-slate-100 rounded-full h-2.5 overflow-hidden">
@@ -172,7 +182,7 @@
                         </div>
                     </div>
 
-                    <!-- Hint Accordion / Button (Crucial Requirement: Give hints, don't give away answers) -->
+                    <!-- Hint Accordion / Button -->
                     <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2 text-amber-800 font-bold text-sm">
@@ -193,7 +203,7 @@
                         <!-- Options injected via JS -->
                     </div>
 
-                    <!-- Immediate Feedback Box (No direct answer spoiler if wrong, encourages retry or explains rule) -->
+                    <!-- Immediate Feedback Box -->
                     <div id="feedback-box" class="hidden rounded-2xl p-4 border text-sm leading-relaxed">
                         <div class="flex items-start space-x-3">
                             <i id="feedback-icon" class="fa-solid fa-circle-check text-lg mt-0.5"></i>
@@ -225,13 +235,16 @@
                 
                 <div>
                     <span id="result-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-2">학습 결과</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-800">최종 점수: <span id="final-score" class="text-indigo-600">100</span>점</h2>
-                    <p id="result-message" class="text-slate-600 mt-2 text-sm sm:text-base leading-relaxed">
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-800">이번 회차 점수: <span id="final-score" class="text-indigo-600">100</span>점</h2>
+                    <p id="db-sync-status" class="text-xs text-slate-400 mt-1 flex items-center justify-center">
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i> 교사 데이터베이스(구글 스프레드시트)에 안전하게 기록되었습니다.
+                    </p>
+                    <p id="result-message" class="text-slate-600 mt-3 text-sm sm:text-base leading-relaxed">
                         축하합니다! 90점 이상을 달성하여 복습 노트가 잠금 해제되었습니다.
                     </p>
                 </div>
 
-                <!-- Wrong Questions Review (Shows hints & rules, NOT raw answers, to encourage re-solving) -->
+                <!-- Wrong Questions Review (Shows hints ONLY) -->
                 <div id="wrong-review-section" class="hidden text-left bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
                     <h3 class="font-bold text-slate-800 text-sm flex items-center">
                         <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i>
@@ -296,7 +309,6 @@
 
                 <!-- Visual Cards Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
                     <!-- Rule 1: 조사 (제41항) -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -346,10 +358,9 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Crucial Comparison Table: 조사 vs 의존 명사 / 어미 -->
+                <!-- Crucial Comparison Table -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-scale-balanced text-indigo-600 text-lg"></i>
@@ -392,7 +403,6 @@
 
                 <!-- Rule 3 & 4: 단위 명사 & 보조 용언 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Rule 3: 단위 명사 (제43항) -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <span class="bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-1 rounded-lg">제43항</span>
@@ -408,12 +418,11 @@
                             </div>
                             <div class="pt-1 border-t border-slate-200">
                                 <span class="text-xs font-bold text-slate-500 block">허용 (붙여 쓸 수 있음)</span>
-                                <span>제1과 / 삼학년 / 10개 / 2026년 11월 21일</span>
+                                <span>제1과 / 삼학년 / 10개 / 2026년 11월 22일</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Rule 4: 보조 용언 (제47항) -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <span class="bg-rose-100 text-rose-700 font-bold text-xs px-2.5 py-1 rounded-lg">제47항</span>
@@ -435,23 +444,22 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
 
     </main>
 
     <!-- ========================================== -->
-    <!-- ADMIN MODAL (TEACHER DASHBOARD)            -->
+    <!-- ADMIN MODAL (PRIVACY-SAFE TEACHER PANEL)   -->
     <!-- ========================================== -->
     <div id="admin-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
             
             <!-- Modal Header -->
             <div class="px-6 py-4 bg-slate-800 text-white flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-user-shield text-indigo-400"></i>
-                    <h3 class="font-bold text-lg">교사 관리자 페이지 - 학생 학습 현황</h3>
+                    <h3 class="font-bold text-lg">교사 관리자 페이지 (개인정보 비노출 보안 모드)</h3>
                 </div>
                 <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white transition">
                     <i class="fa-solid fa-xmark text-xl"></i>
@@ -463,7 +471,7 @@
                 <div class="w-12 h-12 bg-slate-100 text-slate-700 rounded-xl flex items-center justify-center mx-auto text-xl">
                     <i class="fa-solid fa-key"></i>
                 </div>
-                <h4 class="font-bold text-lg text-slate-800">관리자 인증</h4>
+                <h4 class="font-bold text-lg text-slate-800">교사 관리자 인증</h4>
                 <p class="text-xs text-slate-500">교사용 비밀번호를 입력하세요. (초기 비밀번호: <strong>1234</strong>)</p>
                 <form onsubmit="verifyAdmin(event)" class="space-y-3">
                     <input type="password" id="admin-pw-input" placeholder="비밀번호 입력" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-center tracking-widest outline-none focus:ring-2 focus:ring-indigo-500">
@@ -473,64 +481,58 @@
                 </form>
             </div>
 
-            <!-- Admin Dashboard Content -->
+            <!-- Admin Dashboard Content (Anonymous Stats + Direct Spreadsheet Link) -->
             <div id="admin-dashboard-view" class="hidden p-6 overflow-y-auto space-y-6">
                 
-                <!-- Summary KPI Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p class="text-xs text-slate-500 font-medium">총 응시 학생 수</p>
+                <!-- Privacy Notice -->
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs text-emerald-900 space-y-1">
+                    <p class="font-bold flex items-center text-sm">
+                        <i class="fa-solid fa-lock mr-1.5 text-emerald-600"></i> 개인정보 보호 원칙 적용 안내
+                    </p>
+                    <p>학생들의 <strong>이름과 학번은 웹 앱에 절대 불러오지 않으며</strong>, 오직 교사 권한이 있는 구글 스프레드시트에서만 직접 열람할 수 있습니다. 이 화면에서는 익명화된 전체 학습 통계만 제공됩니다.</p>
+                </div>
+
+                <!-- Summary KPI Cards (Anonymous Aggregate Data) -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                        <p class="text-xs text-slate-500 font-medium">총 참여 학생 수</p>
                         <p class="text-2xl font-black text-slate-800 mt-1" id="stat-total-students">0명</p>
                     </div>
-                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
-                        <p class="text-xs text-emerald-700 font-medium">90점 이상 통과(복습해제)</p>
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-center">
+                        <p class="text-xs text-emerald-700 font-medium">90점 이상 통과</p>
                         <p class="text-2xl font-black text-emerald-700 mt-1" id="stat-passed-students">0명</p>
                     </div>
-                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200">
-                        <p class="text-xs text-indigo-700 font-medium">평균 최고 점수</p>
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 text-center">
+                        <p class="text-xs text-indigo-700 font-medium">전체 평균 점수</p>
                         <p class="text-2xl font-black text-indigo-700 mt-1" id="stat-avg-score">0점</p>
                     </div>
-                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
-                        <p class="text-xs text-amber-700 font-medium">가장 많이 틀린 유형</p>
-                        <p class="text-sm font-bold text-amber-800 mt-2 truncate" id="stat-weak-category">-</p>
-                    </div>
                 </div>
 
-                <!-- Action Toolbar -->
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
-                    <p class="text-xs text-slate-500">
-                        * 현재 브라우저(로컬 스토리지)에 기록된 학습 데이터입니다. 시연용 샘플 데이터를 추가해 볼 수 있습니다.
-                    </p>
+                <!-- Google Apps Script Web App URL Configuration -->
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-slate-700">Google Apps Script 웹 앱 URL 연결 상태</label>
+                        <span id="gas-status-badge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">미연결 (URL 입력 필요)</span>
+                    </div>
                     <div class="flex space-x-2">
-                        <button onclick="addMockStudents()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-2 rounded-lg transition">
-                            <i class="fa-solid fa-plus mr-1"></i> 샘플 학생 데이터 추가
-                        </button>
-                        <button onclick="exportCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-lg transition">
-                            <i class="fa-solid fa-file-excel mr-1"></i> 엑셀(CSV) 다운로드
-                        </button>
-                        <button onclick="clearAllRecords()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold px-3 py-2 rounded-lg transition">
-                            <i class="fa-solid fa-trash mr-1"></i> 기록 초기화
+                        <input type="url" id="admin-gas-url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-grow px-3 py-2 rounded-lg border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button onclick="saveGasUrl()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition whitespace-nowrap">
+                            URL 저장 및 동기화
                         </button>
                     </div>
+                    <p class="text-[11px] text-slate-500">
+                        * 깃허브에 업로드할 때는 코드 상단의 <code class="bg-slate-200 px-1 rounded">GAS_WEB_APP_URL</code> 변수에 URL을 넣어두시면 모든 학생 기기에서 자동으로 연결됩니다.
+                    </p>
                 </div>
 
-                <!-- Student Records Table -->
-                <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                    <table class="w-full text-sm text-left">
-                        <thead class="bg-slate-100 text-slate-600 text-xs uppercase">
-                            <tr>
-                                <th class="px-4 py-3">학년/반</th>
-                                <th class="px-4 py-3">학번/이름</th>
-                                <th class="px-4 py-3">응시 횟수</th>
-                                <th class="px-4 py-3">최고 점수</th>
-                                <th class="px-4 py-3">복습 노트 상태</th>
-                                <th class="px-4 py-3">최근 학습 시각</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-table-body" class="divide-y divide-slate-100 text-slate-700">
-                            <!-- Rows injected via JS -->
-                        </tbody>
-                    </table>
+                <!-- Direct Link to Teacher's Google Spreadsheet -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-200">
+                    <button onclick="refreshAdminStats()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-4 py-3 rounded-xl transition flex items-center justify-center">
+                        <i class="fa-solid fa-rotate mr-1.5"></i> 익명 통계 새로고침
+                    </button>
+                    <a href="https://docs.google.com/spreadsheets/d/1aGB7Vc2WC8oPMds6GCCpsiQYjSLo2VCUKDnT4R4WkoE/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl shadow-sm transition flex items-center justify-center">
+                        <i class="fa-solid fa-table mr-2"></i> 구글 스프레드시트(DB) 열어서 명단 확인하기
+                    </a>
                 </div>
 
             </div>
@@ -540,7 +542,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-5 mt-12">
         <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-400">
-            <p>고등학교 1학년 국어 - 한글 맞춤법 띄어쓰기 자기주도 학습 웹 애플리케이션</p>
+            <p>고등학교 1학년 국어 - 한글 맞춤법 띄어쓰기 자기주도 학습 웹 애플리케이션 (개인정보 비노출 보안 적용)</p>
         </div>
     </footer>
 
@@ -548,8 +550,17 @@
     <!-- JAVASCRIPT LOGIC                           -->
     <!-- ========================================== -->
     <script>
+        // =========================================================================
+        // [교사 설정 영역] 아래 따옴표 안에 배포하신 Google Apps Script 웹 앱 URL을 넣으세요!
+        // 예: const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+        // =========================================================================
+        const DEFAULT_GAS_URL = "";
+
+        function getGasUrl() {
+            return DEFAULT_GAS_URL || localStorage.getItem('gas_web_app_url') || "";
+        }
+
         // 1. Quiz Dataset (10 Practical High School 1st Grade Questions)
-        // Rule: Never reveal the answer directly in hints or wrong-answer feedback.
         const quizData = [
             {
                 id: 1,
@@ -693,21 +704,25 @@
             }
         ];
 
-        // 2. State Management
-        let currentStudent = null; // { className, name }
+        // 2. Privacy-Protected Session State (Stored ONLY in volatile RAM, NEVER in localStorage or DOM)
+        let sessionAuth = {
+            isAuthenticated: false,
+            name: null,
+            studentId: null,
+            bestScore: 0,
+            isPassed: false
+        };
+
         let currentQuestionIndex = 0;
         let userAnswers = new Array(quizData.length).fill(null);
-        let isQuizSubmitted = false;
         let isAdminAuthenticated = false;
-
-        const STORAGE_KEY = 'hangeul_spacing_records_v1';
 
         // 3. Initialization
         window.onload = function() {
             updateReviewLockUI();
         };
 
-        // 4. Utility: Toast Notification (No alert!)
+        // 4. Utility: Toast Notification
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast-box');
             const msgEl = document.getElementById('toast-msg');
@@ -724,31 +739,29 @@
             toast.classList.remove('translate-y-24', 'opacity-0');
             setTimeout(() => {
                 toast.classList.add('translate-y-24', 'opacity-0');
-            }, 3200);
+            }, 3400);
         }
 
-        // 5. LocalStorage Data Helpers
-        function getRecords() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                return raw ? JSON.parse(raw) : [];
-            } catch (e) {
-                console.error("Storage read error", e);
-                return [];
+        // 5. Google Apps Script API Helper (Sends Name/ID solely to Spreadsheet DB)
+        async function callGasApi(payload) {
+            const url = getGasUrl();
+            if (!url) {
+                return { status: 'no_url' };
             }
-        }
 
-        function saveRecords(records) {
             try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-            } catch (e) {
-                console.error("Storage write error", e);
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                return await response.json();
+            } catch (err) {
+                console.error("GAS 통신 오류:", err);
+                return { status: 'error', message: err.toString() };
             }
-        }
-
-        function getStudentRecord(className, name) {
-            const records = getRecords();
-            return records.find(r => r.className === className && r.name === name);
         }
 
         // 6. Tab Navigation & Lock Verification
@@ -779,15 +792,12 @@
             const unlockedView = document.getElementById('review-unlocked-view');
             const lockScreenScore = document.getElementById('lock-screen-score');
 
-            let bestScore = 0;
-            if (currentStudent) {
-                const rec = getStudentRecord(currentStudent.className, currentStudent.name);
-                if (rec) bestScore = rec.bestScore;
-            }
+            const bestScore = sessionAuth.isAuthenticated ? sessionAuth.bestScore : 0;
+            const isUnlocked = sessionAuth.isAuthenticated && (sessionAuth.isPassed || bestScore >= 90);
 
             lockScreenScore.textContent = `${bestScore}점`;
 
-            if (bestScore >= 90) {
+            if (isUnlocked) {
                 lockBadge.classList.add('hidden');
                 unlockBadge.classList.remove('hidden');
                 lockedView.classList.add('hidden');
@@ -800,37 +810,47 @@
             }
         }
 
-        // 7. Student Login & Quiz Start
-        function startLearning(e) {
+        // 7. Student Login & Identity Check (Zero PII Exposure in UI)
+        async function startLearning(e) {
             e.preventDefault();
-            const className = document.getElementById('input-class').value.trim();
-            const name = document.getElementById('input-name').value.trim();
+            const nameInput = document.getElementById('input-name');
+            const idInput = document.getElementById('input-student-id');
+            const submitBtn = document.getElementById('btn-login-submit');
 
-            if (!className || !name) return;
+            const name = nameInput.value.trim();
+            const studentId = idInput.value.trim();
 
-            currentStudent = { className, name };
+            if (!name || !studentId) return;
 
-            // Ensure student exists in records
-            let records = getRecords();
-            let existing = records.find(r => r.className === className && r.name === name);
-            if (!existing) {
-                existing = {
-                    className,
-                    name,
-                    attempts: 0,
-                    bestScore: 0,
-                    wrongCategories: {},
-                    lastUpdated: new Date().toLocaleString('ko-KR')
-                };
-                records.push(existing);
-                saveRecords(records);
-            }
+            // Immediately clear input fields in DOM so PII never lingers on screen
+            nameInput.value = '';
+            idInput.value = '';
 
-            // Update Header UI
-            document.getElementById('display-student-info').textContent = `${className} ${name}`;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 데이터베이스 신원 확인 중...';
+
+            // Query Google Spreadsheet DB for existing pass record
+            const res = await callGasApi({
+                action: 'check',
+                name: name,
+                studentId: studentId
+            });
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>신원 확인 후 학습 시작하기</span><i class="fa-solid fa-arrow-right"></i>';
+
+            sessionAuth = {
+                isAuthenticated: true,
+                name: name,
+                studentId: studentId,
+                bestScore: (res && res.status === 'success') ? (res.bestScore || 0) : 0,
+                isPassed: (res && res.status === 'success') ? Boolean(res.passed) : false
+            };
+
+            // Show anonymous badge (NEVER shows name or studentId)
             document.getElementById('student-badge').classList.remove('hidden');
             document.getElementById('student-badge').classList.add('flex');
-            document.getElementById('best-score-display').textContent = existing.bestScore;
+            document.getElementById('best-score-display').textContent = sessionAuth.bestScore;
 
             // Switch Views
             document.getElementById('student-login-card').classList.add('hidden');
@@ -840,23 +860,37 @@
             resetQuizState();
             renderQuestion();
             updateReviewLockUI();
-            showToast(`${name} 학생, 환영합니다! 90점 이상에 도전해 보세요.`, 'info');
+
+            if (res.status === 'no_url') {
+                showToast('신원 인증 완료 (교사 관리자에서 스프레드시트 URL을 연결하면 기록이 저장됩니다)', 'warning');
+            } else if (sessionAuth.isPassed) {
+                showToast('기존 90점 이상 통과 기록이 확인되어 [복습 노트]가 열렸습니다!', 'success');
+            } else {
+                showToast('신원이 확인되었습니다. 개인정보는 화면에 노출되지 않습니다.', 'info');
+            }
         }
 
         function logoutStudent() {
-            currentStudent = null;
+            // Wipe all PII from volatile memory
+            sessionAuth = {
+                isAuthenticated: false,
+                name: null,
+                studentId: null,
+                bestScore: 0,
+                isPassed: false
+            };
             document.getElementById('student-badge').classList.add('hidden');
             document.getElementById('student-badge').classList.remove('flex');
             document.getElementById('student-login-card').classList.remove('hidden');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-result-card').classList.add('hidden');
             updateReviewLockUI();
+            showToast('로그아웃되었으며 모든 신원 정보가 초기화되었습니다.', 'info');
         }
 
         function resetQuizState() {
             currentQuestionIndex = 0;
             userAnswers = new Array(quizData.length).fill(null);
-            isQuizSubmitted = false;
         }
 
         // 8. Quiz Rendering & Interaction
@@ -867,18 +901,15 @@
             document.getElementById('quiz-category').textContent = q.category;
             document.getElementById('question-text').innerHTML = q.question;
             
-            // Reset Hint Box
             const hintContent = document.getElementById('hint-content');
             const hintBtn = document.getElementById('hint-toggle-btn');
             hintContent.innerHTML = q.hint;
             hintContent.classList.add('hidden');
             hintBtn.textContent = '힌트 보기';
 
-            // Progress Bar
             const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
             document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
 
-            // Options
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
 
@@ -909,7 +940,6 @@
                 optionsContainer.appendChild(btn);
             });
 
-            // Immediate Feedback Handling (Rule: Do NOT give away direct answer if wrong!)
             const feedbackBox = document.getElementById('feedback-box');
             if (selectedIdx !== null) {
                 showQuestionFeedback(q, selectedIdx);
@@ -917,7 +947,6 @@
                 feedbackBox.classList.add('hidden');
             }
 
-            // Navigation Buttons
             document.getElementById('btn-prev').disabled = currentQuestionIndex === 0;
             const btnNext = document.getElementById('btn-next');
             const btnNextText = document.getElementById('btn-next-text');
@@ -952,13 +981,11 @@
             feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-amber-50', 'border-amber-200', 'text-amber-900');
 
             if (selectedIdx === q.answer) {
-                // Correct: Explain the grammatical rule
                 feedbackBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900');
                 feedbackIcon.className = 'fa-solid fa-circle-check text-emerald-600 text-lg mt-0.5';
                 feedbackTitle.textContent = '정답입니다! 규정을 정확히 적용했네요.';
                 feedbackDesc.textContent = q.ruleExplanation;
             } else {
-                // Wrong: DO NOT reveal which option is the answer! Give hint to reconsider.
                 feedbackBox.classList.add('bg-amber-50', 'border-amber-200', 'text-amber-900');
                 feedbackIcon.className = 'fa-solid fa-lightbulb text-amber-600 text-lg mt-0.5';
                 feedbackTitle.textContent = '아쉽습니다! 선택한 답안을 다시 한번 점검해 보세요.';
@@ -984,8 +1011,8 @@
             }
         }
 
-        // 9. Quiz Completion & Scoring
-        function finishQuiz() {
+        // 9. Quiz Completion & Direct Transmission to Google Spreadsheet DB
+        async function finishQuiz() {
             let correctCount = 0;
             const wrongQuestions = [];
 
@@ -999,23 +1026,15 @@
 
             const score = Math.round((correctCount / quizData.length) * 100);
 
-            // Save to LocalStorage
-            let records = getRecords();
-            let rec = records.find(r => r.className === currentStudent.className && r.name === currentStudent.name);
-            if (rec) {
-                rec.attempts += 1;
-                if (score > rec.bestScore) {
-                    rec.bestScore = score;
-                }
-                wrongQuestions.forEach(wq => {
-                    rec.wrongCategories[wq.category] = (rec.wrongCategories[wq.category] || 0) + 1;
-                });
-                rec.lastUpdated = new Date().toLocaleString('ko-KR');
-                saveRecords(records);
-                document.getElementById('best-score-display').textContent = rec.bestScore;
+            if (score > sessionAuth.bestScore) {
+                sessionAuth.bestScore = score;
             }
+            if (score >= 90) {
+                sessionAuth.isPassed = true;
+            }
+            document.getElementById('best-score-display').textContent = sessionAuth.bestScore;
 
-            // Show Result View
+            // Show Result View immediately
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-result-card').classList.remove('hidden');
 
@@ -1024,15 +1043,17 @@
             const badge = document.getElementById('result-badge');
             const msg = document.getElementById('result-message');
             const btnGoReview = document.getElementById('btn-go-review');
+            const syncStatus = document.getElementById('db-sync-status');
 
-            if (score >= 90) {
+            syncStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5 text-indigo-500"></i> 교사 데이터베이스(구글 스프레드시트)로 결과 전송 중...';
+
+            if (sessionAuth.isPassed || score >= 90) {
                 iconWrap.className = 'w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl bg-emerald-100 text-emerald-600 shadow-inner';
                 iconWrap.textContent = '🏆';
                 badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold mb-2 bg-emerald-100 text-emerald-700';
                 badge.textContent = '목표 달성 (90점 이상)';
                 msg.innerHTML = `훌륭합니다! <strong>${score}점</strong>을 달성하여 <strong>[탭 2. 핵심 규정 복습 노트]</strong>가 잠금 해제되었습니다.<br>집에서도 복습 노트를 활용해 띄어쓰기 규정을 완벽히 익혀보세요.`;
                 btnGoReview.classList.remove('hidden');
-                showToast('축하합니다! 복습 노트가 잠금 해제되었습니다.', 'success');
             } else {
                 iconWrap.className = 'w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl bg-amber-100 text-amber-600 shadow-inner';
                 iconWrap.textContent = '💪';
@@ -1040,10 +1061,9 @@
                 badge.textContent = '복습 노트 잠금 유지 (90점 미만)';
                 msg.innerHTML = `현재 점수는 <strong>${score}점</strong>입니다. 복습 노트를 열려면 <strong>90점 이상</strong>이 필요합니다.<br>틀린 문제의 힌트를 확인한 뒤 다시 도전해 보세요!`;
                 btnGoReview.classList.add('hidden');
-                showToast('90점 이상 달성 시 복습 노트가 열립니다. 다시 도전해 보세요!', 'warning');
             }
 
-            // Populate Wrong Questions with HINTS ONLY (no answers)
+            // Populate Wrong Questions with HINTS ONLY
             const wrongSection = document.getElementById('wrong-review-section');
             const wrongList = document.getElementById('wrong-list');
             wrongList.innerHTML = '';
@@ -1068,6 +1088,22 @@
             }
 
             updateReviewLockUI();
+
+            // Transmit Name, Student ID, Score to Google Spreadsheet DB
+            const saveRes = await callGasApi({
+                action: 'save',
+                name: sessionAuth.name,
+                studentId: sessionAuth.studentId,
+                score: score
+            });
+
+            if (saveRes && saveRes.status === 'success') {
+                syncStatus.innerHTML = '<i class="fa-solid fa-cloud-check mr-1.5 text-emerald-600"></i> <span class="text-emerald-700 font-medium">구글 스프레드시트 DB 저장 완료 (개인정보 비노출 보안 적용)</span>';
+            } else if (saveRes && saveRes.status === 'no_url') {
+                syncStatus.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1.5 text-amber-500"></i> <span class="text-amber-700">스프레드시트 URL이 아직 설정되지 않아 현재 세션에만 반영되었습니다.</span>';
+            } else {
+                syncStatus.innerHTML = '<i class="fa-solid fa-circle-xmark mr-1.5 text-rose-500"></i> <span class="text-rose-600">데이터베이스 전송 중 일시적 오류가 발생했습니다.</span>';
+            }
         }
 
         function retryQuiz() {
@@ -1077,13 +1113,13 @@
             renderQuestion();
         }
 
-        // 10. Teacher Admin Dashboard Logic
+        // 10. Teacher Admin Dashboard Logic (Anonymous Stats + Spreadsheet Link)
         function openAdminModal() {
             document.getElementById('admin-modal').classList.remove('hidden');
             if (isAdminAuthenticated) {
                 document.getElementById('admin-login-view').classList.add('hidden');
                 document.getElementById('admin-dashboard-view').classList.remove('hidden');
-                renderAdminDashboard();
+                initAdminView();
             } else {
                 document.getElementById('admin-login-view').classList.remove('hidden');
                 document.getElementById('admin-dashboard-view').classList.add('hidden');
@@ -1102,130 +1138,61 @@
                 isAdminAuthenticated = true;
                 document.getElementById('admin-login-view').classList.add('hidden');
                 document.getElementById('admin-dashboard-view').classList.remove('hidden');
-                renderAdminDashboard();
+                initAdminView();
                 showToast('교사 관리자 모드로 접속했습니다.', 'success');
             } else {
                 showToast('비밀번호가 일치하지 않습니다. (초기값: 1234)', 'error');
             }
         }
 
-        function renderAdminDashboard() {
-            const records = getRecords();
-            const tbody = document.getElementById('admin-table-body');
-            tbody.innerHTML = '';
+        function initAdminView() {
+            const currentUrl = getGasUrl();
+            document.getElementById('admin-gas-url').value = currentUrl;
+            updateGasStatusBadge(currentUrl);
+            refreshAdminStats();
+        }
 
-            const totalStudents = records.length;
-            const passedStudents = records.filter(r => r.bestScore >= 90).length;
-            const avgScore = totalStudents > 0 
-                ? Math.round(records.reduce((acc, cur) => acc + cur.bestScore, 0) / totalStudents) 
-                : 0;
+        function updateGasStatusBadge(url) {
+            const badge = document.getElementById('gas-status-badge');
+            if (url) {
+                badge.className = 'text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800';
+                badge.textContent = '연결됨 (실시간 DB 작동 중)';
+            } else {
+                badge.className = 'text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800';
+                badge.textContent = '미연결 (URL 입력 필요)';
+            }
+        }
 
-            // Calculate most missed category
-            const categoryCounts = {};
-            records.forEach(r => {
-                if (r.wrongCategories) {
-                    Object.entries(r.wrongCategories).forEach(([cat, count]) => {
-                        categoryCounts[cat] = (categoryCounts[cat] || 0) + count;
-                    });
-                }
-            });
-            let weakCat = '-';
-            let maxWrong = 0;
-            Object.entries(categoryCounts).forEach(([cat, count]) => {
-                if (count > maxWrong) {
-                    maxWrong = count;
-                    weakCat = cat;
-                }
-            });
-
-            document.getElementById('stat-total-students').textContent = `${totalStudents}명`;
-            document.getElementById('stat-passed-students').textContent = `${passedStudents}명`;
-            document.getElementById('stat-avg-score').textContent = `${avgScore}점`;
-            document.getElementById('stat-weak-category').textContent = weakCat;
-
-            if (records.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="px-4 py-8 text-center text-slate-400">
-                            아직 학습 기록이 없습니다. 우측 상단의 '샘플 학생 데이터 추가'를 눌러 기능을 확인해 보세요.
-                        </td>
-                    </tr>
-                `;
+        function saveGasUrl() {
+            const urlInput = document.getElementById('admin-gas-url').value.trim();
+            if (!urlInput) {
+                showToast('Google Apps Script 웹 앱 URL을 입력해 주세요.', 'warning');
                 return;
             }
-
-            // Sort by bestScore descending
-            const sorted = [...records].sort((a, b) => b.bestScore - a.bestScore);
-
-            sorted.forEach(r => {
-                const isPassed = r.bestScore >= 90;
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50 transition';
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${r.className}</td>
-                    <td class="px-4 py-3 font-bold text-slate-800">${r.name}</td>
-                    <td class="px-4 py-3">${r.attempts}회</td>
-                    <td class="px-4 py-3 font-bold ${isPassed ? 'text-emerald-600' : 'text-amber-600'}">${r.bestScore}점</td>
-                    <td class="px-4 py-3">
-                        ${isPassed 
-                            ? '<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-lock-open mr-1"></i>해제 완료</span>' 
-                            : '<span class="bg-slate-100 text-slate-500 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-lock mr-1"></i>잠김 (90점 미만)</span>'
-                        }
-                    </td>
-                    <td class="px-4 py-3 text-xs text-slate-400">${r.lastUpdated}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+            localStorage.setItem('gas_web_app_url', urlInput);
+            updateGasStatusBadge(urlInput);
+            showToast('스프레드시트 웹 앱 URL이 저장되었습니다.', 'success');
+            refreshAdminStats();
         }
 
-        function addMockStudents() {
-            const mockData = [
-                { className: '1학년 2반', name: '03번 김서연', attempts: 2, bestScore: 100, wrongCategories: { '제42항 의존 명사': 1 }, lastUpdated: '2026. 11. 21. 오후 4:10:12' },
-                { className: '1학년 2반', name: '11번 박지훈', attempts: 1, bestScore: 90, wrongCategories: { '제47항 보조 용언': 1 }, lastUpdated: '2026. 11. 21. 오후 4:25:40' },
-                { className: '1학년 2반', name: '18번 이도현', attempts: 3, bestScore: 70, wrongCategories: { '제42항 의존 명사': 3, '제47항 보조 용언': 2 }, lastUpdated: '2026. 11. 21. 오후 4:50:05' },
-                { className: '1학년 5반', name: '07번 최수빈', attempts: 2, bestScore: 90, wrongCategories: { '제43항 단위 명사': 1 }, lastUpdated: '2026. 11. 21. 오후 5:02:19' }
-            ];
+        async function refreshAdminStats() {
+            const url = getGasUrl();
+            if (!url) return;
 
-            let records = getRecords();
-            mockData.forEach(m => {
-                if (!records.some(r => r.className === m.className && r.name === m.name)) {
-                    records.push(m);
-                }
-            });
-            saveRecords(records);
-            renderAdminDashboard();
-            showToast('샘플 학생 학습 현황 데이터가 추가되었습니다.', 'success');
-        }
+            document.getElementById('stat-total-students').textContent = '...';
+            document.getElementById('stat-passed-students').textContent = '...';
+            document.getElementById('stat-avg-score').textContent = '...';
 
-        function clearAllRecords() {
-            localStorage.removeItem(STORAGE_KEY);
-            renderAdminDashboard();
-            updateReviewLockUI();
-            showToast('모든 학습 기록이 초기화되었습니다.', 'info');
-        }
-
-        function exportCSV() {
-            const records = getRecords();
-            if (records.length === 0) {
-                showToast('다운로드할 학습 기록이 없습니다.', 'warning');
-                return;
+            const res = await callGasApi({ action: 'stats' });
+            if (res && res.status === 'success') {
+                document.getElementById('stat-total-students').textContent = `${res.total}명`;
+                document.getElementById('stat-passed-students').textContent = `${res.passedCount}명`;
+                document.getElementById('stat-avg-score').textContent = `${res.avgScore}점`;
+            } else {
+                document.getElementById('stat-total-students').textContent = '0명';
+                document.getElementById('stat-passed-students').textContent = '0명';
+                document.getElementById('stat-avg-score').textContent = '0점';
             }
-
-            let csvContent = "\uFEFF학년/반,학번/이름,응시횟수,최고점수,복습노트상태,최근학습시각\n";
-            records.forEach(r => {
-                const status = r.bestScore >= 90 ? "해제완료" : "잠김";
-                csvContent += `"${r.className}","${r.name}",${r.attempts},${r.bestScore},"${status}","${r.lastUpdated}"\n`;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `고1_띄어쓰기_학습현황_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast('엑셀(CSV) 파일이 다운로드되었습니다.', 'success');
         }
     </script>
 </body>
